@@ -73,12 +73,16 @@ contains
        call element%calculateLocalSystem(app%model%processInfo, localLHS, localRHS)
        do iNode = 1, nNode
           iNodeID = element%getNodeID(iNode)
+          !! !$OMP ATOMIC
           app%model%rhs(iNodeID*4-3) = app%model%rhs(iNodeID*4-3) &
                + localRHS(iNode*4-3)
+          !! !$OMP ATOMIC
           app%model%rhs(iNodeID*4-2) = app%model%rhs(iNodeID*4-2) &
                + localRHS(iNode*4-2)
+          !! !$OMP ATOMIC
           app%model%rhs(iNodeID*4-1) = app%model%rhs(iNodeID*4-1) &
                + localRHS(iNode*4-1)
+          !! !$OMP ATOMIC
           app%model%rhs(iNodeID*4) = app%model%rhs(iNodeID*4) &
                + localRHS(iNode*4)
        end do

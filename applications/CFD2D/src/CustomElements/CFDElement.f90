@@ -121,7 +121,7 @@ contains
     real(rkind)                                               :: K1jUj(4), K2jUj(4), lambda, mu, temp
     real(rkind)                                               :: Cv, T_inf, r
     !Esto de la línea siguiente no hace nada creo..
-    !! !OMP DEFAULT(PRIVATE) SHARED(lambda, mu, temp, Cf, t_inf, gamma, lumpedMass, stabMat)
+    !OMP DEFAULT(PRIVATE) SHARED(lambda, mu, temp, Cf, t_inf, gamma, lumpedMass, stabMat)
     nNode = this%getnNode()
     nDof  = 4
     allocate(U(nDof,nNode))

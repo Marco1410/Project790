@@ -14,6 +14,7 @@ module CFDStrategyM
   use SolvingStrategyM
 
   use PrintM
+  use RestartPrintM
 
   use CFDSchemeM
   use CFDBuilderAndSolverM
@@ -22,7 +23,6 @@ module CFDStrategyM
 
   use NavierStokes2DM
 
-  use AdamsB4M
   use ExplicitEulerM
 
   implicit none
@@ -44,17 +44,16 @@ contains
     type(CFDSchemeDT)                       :: scheme
     type(CFDBuilderAndSolverDT)             :: builderAndSolver
     type(PrintDT)                           :: writeOutput
+    type(RestartPrintDT)                    :: writeRestart
     type(NavierStokes2DDT)                  :: NavierStokes2D
     type(ExplicitEulerDT)                   :: ExplicitEuler
-    type(AdamsB4DT)                         :: AdamsBash4 
     real(rkind), dimension(:) , allocatable :: oldDof
     real(rkind)                             :: dtMin, dtMin1, t
     real(rkind)                             :: factor, error, porc
     real(rkind)                             :: errorTol, error1(4), error2(4)
     integer(ikind)                          :: maxIter, iNode, nNode, i, iDof
     integer(ikind)                          :: step1, step2, printStep
-    integer(ikind)                          :: flagg, stab, RK
-    logical                                 :: multi_step = .true.
+    logical                                 :: multi_step = .false.
     select type(this)
     class is(SolvingStrategyDT)
        call debugLog('  *** Transient Strategy ***')
@@ -72,45 +71,28 @@ contains
        error     = errorTol+1
        error1    = errorTol+1
        error2    = 1._rkind
-       step1     = 0
-       step2     = printStep
-       t         = 0._rkind
-       flagg     = 1
-       stab      = 1
-       RK        = 4
+       step1     = this%application%model%processInfo%getStep()
+       step2     = step1 + printStep
+       t         = this%application%model%processInfo%getTime()
        call calculateMass(this%application)
-       call writeOutput%initPrint()
+       if(step1 == 0) then
+          call writeOutput%initPrintFile()
+       else
+          call writeOutput%restartPrintFile()
+       end if
        call builderAndSolver%applyDirichlet(this%application)
        do while (step1 < maxIter .and. error > errorTol)
-          step1 = step1 + 1
+          step1  = step1 + 1
           call calculateDT(this%application)
-          dtMin = this%application%model%processInfo%getDT()
+          dtMin  = this%application%model%processInfo%getDT()
           t      = t + dtmin
           oldDof = this%application%model%dof
           call this%application%model%processInfo%setStep(step1)
-          if(flagg <= 4) then
-             if(flagg == 1) then
-                call builderAndSolver%build(this%application)
-             else
-                call builderAndSolver%update(this%application)
-             end if
-             navierStokes2D = SetNavierStokes2D &
-                  (this%application%model%dof, this%application%model%rhs, ExplicitEuler, step1)
-             call navierStokes2D%integrate(dtMin, multi_step)
-             this%application%model%dof = navierStokes2D%getState()
-          else
-             if(stab == 4) stab = 1
-             if(stab == 2) then
-                call builderAndSolver%build(this%application)
-             else
-                call builderAndSolver%update(this%application)
-             end if
-             stab = stab + 1
-             navierStokes2D = SetNavierStokes2D &
-                  (this%application%model%dof, this%application%model%rhs, AdamsBash4, step1)
-             call navierStokes2D%integrate(dtMin, multi_step)
-             this%application%model%dof = navierStokes2D%getState()
-          end if
+          call builderAndSolver%build(this%application)
+          navierStokes2D = SetNavierStokes2D &
+               (this%application%model%dof, this%application%model%rhs, ExplicitEuler, step1)
+          call navierStokes2D%integrate(dtMin, multi_step)
+          this%application%model%dof = navierStokes2D%getState()
           if (step1 == step2 .or. step1 == maxIter) then
              error1 = 0._rkind
              error2 = 0._rkind
@@ -129,10 +111,13 @@ contains
                 stop
              end if
              call scheme%calculateOutputs(this%application)
-             call writeOutput%print(step1, this%application%model%results%density           &
-                  , this%application%model%results%internalEnergy, this%application%model%results%mach       &
-                  , this%application%model%results%pressure      , this%application%model%results%temperature&
+             call writeOutput%print(step1, this%application%model%results%density          &
+                  , this%application%model%results%internalEnergy                          &
+                  , this%application%model%results%mach                                    &
+                  , this%application%model%results%pressure                                &
+                  , this%application%model%results%temperature                             &
                   , this%application%model%results%velocity                                )
+             call writeRestart%print(step1, nNode, t, this%application%model%dof)
              call debugLog('::::::::::::::::::::::::::::::::::::::::')
              call debugLog('Step     : ', step1)
              call debugLog('Error Ec. de Continuidad  = ', sqrt(error1(1)/error2(1)))
@@ -155,7 +140,6 @@ contains
              print'(A40)'      , '::::::::::::::::::::::::::::::::::::::::' 
              step2 = step2 + printStep
           end if
-          flagg = flagg + 1
           call builderAndSolver%applyDirichlet(this%application)
        end do
        call debugLog('*** Finished Integration ***')

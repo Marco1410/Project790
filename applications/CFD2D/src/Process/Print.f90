@@ -13,17 +13,24 @@ module PrintM
 
   type, extends(NewProcessDT) :: PrintDT
    contains
-     procedure :: initPrint
+     procedure :: initPrintFile
+     procedure :: restartPrintFile
      procedure :: print
   end type PrintDT
 
 contains
 
-  subroutine initPrint(this)
+  subroutine initPrintFile(this)
     implicit none
     class(PrintDT), intent(inout) :: this
     call initDataOutput()
-  end subroutine initPrint
+  end subroutine initPrintFile
+
+  subroutine restartPrintFile(this)
+    implicit none
+    class(PrintDT), intent(inout) :: this
+    call openDataOutput()
+  end subroutine restartPrintFile
   
   subroutine print(this, step, density, internalEnergy&
        , mach, pressure, temperature, velocity        )

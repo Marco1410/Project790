@@ -62,7 +62,7 @@ contains
        call local_sum%set_quadrature(lhs%get_quadrature())
        local_sum%state = lhs%state + rhs%state
     class default
-       stop 'assig_navierStokes2D: unsupported class'
+       stop 'add_navierStokes2D: unsupported class'
     end select
     call move_alloc(local_sum,sum)
   end function add_navierStokes2D

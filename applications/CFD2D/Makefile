@@ -11,6 +11,7 @@ FFLAGSDebug 	:=  -O0 -fpp -check bounds -traceback -warn nounused -module $(OBJE
 
 OBJECTS := $(BINDIR)/CFDMaterial.o      \
 	$(BINDIR)/CFDElement.o      	\
+	$(BINDIR)/RestartPrint.o        \
 	$(BINDIR)/Print.o               \
 	$(BINDIR)/Results.o             \
 	$(BINDIR)/NormalVelocity.o      \
@@ -58,6 +59,8 @@ $(BINDIR)/CFDApplication.o : $(VPATH)/CFDApplication.f90
 $(BINDIR)/DataInput.o : $(VPATH)/CustomIO/DataInput.f90
 	$(COMPILER) $(FFLAGS) -c $^ -I$(LIBOBJECTS) -o $@
 $(BINDIR)/CFDMaterial.o : $(VPATH)/CFDMaterial.f90
+	$(COMPILER) $(FFLAGS) -c $^ -I$(LIBOBJECTS) -o $@
+$(BINDIR)/RestartPrint.o : $(VPATH)/Process/RestartPrint.f90
 	$(COMPILER) $(FFLAGS) -c $^ -I$(LIBOBJECTS) -o $@
 $(BINDIR)/Print.o : $(VPATH)/Process/Print.f90
 	$(COMPILER) $(FFLAGS) -c $^ -I$(LIBOBJECTS) -o $@

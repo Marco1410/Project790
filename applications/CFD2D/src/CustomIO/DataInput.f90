@@ -42,6 +42,7 @@ module DataInputM
   integer(ikind)               :: nPointSource
   integer(ikind)               :: nSurfaceSource
   integer(ikind)               :: printStep
+  integer(ikind)               :: restart
   real(rkind)                  :: t0
   real(rkind)                  :: errorTol
   integer(ikind)               :: maxIter
@@ -62,6 +63,7 @@ module DataInputM
   character(100)               :: projectName
   character(100)               :: aux
   logical       , parameter    :: verbose = .false.
+  integer(ikind), parameter    :: restartFile = 94
   
   interface initFEM2D
      procedure :: initFEM2D
@@ -130,6 +132,7 @@ contains
     read(project,*)  aux, maxIter
     read(project,*)  aux, fSafe
     read(project,*)  aux, constant
+    read(project,*)  aux, restart
     constant = 1.d0/constant
     
     if(verbose) print'(A,I0)','Number of Elements.............................: ', nElem
@@ -154,6 +157,7 @@ contains
     if(verbose) print'(A,I0)','Max Iterations.................................:', maxIter
     if(verbose) print'(A,E14.7)','Safety Factor..................................:', fSafe
     if(verbose) print'(A,E14.7)','Shock Capturing constant.......................:', constant
+    if(verbose) print'(A,I0)','Restart?.......................................:', restart
     
     call debugLog('    Number of Elements.............................: ', nElem)
     call debugLog('    Are Elements Quadratic.........................: ', isQuadratic)
@@ -177,6 +181,7 @@ contains
     call debugLog('    Max Iterations.................................: ', maxIter)
     call debugLog('    Safety Factor..................................: ', fSafe)
     call debugLog('    Shock Capturing constant.......................: ', constant)
+    call debugLog('    Restart?............... .......................: ', restart)
     
     cfdAppl = cfdApplication(                  &
            nNode = nPoint                                      &
@@ -373,13 +378,31 @@ contains
   subroutine initDof(cfdAppl)
     implicit none
     type(CFDApplicationDT), intent(inout) :: cfdAppl
-    integer(ikind) :: i
-    do i = 1, cfdAppl%model%getnNode()
-       cfdAppl%model%dof(i*4-3) = rho
-       cfdAppl%model%dof(i*4-2) = rho*Vx
-       cfdAppl%model%dof(i*4-1) = rho*Vy
-       cfdAppl%model%dof(i*4  ) = rho*(Cv*T+0.5d0*(Vx**2+Vy**2)) 
-    end do
+    integer(ikind)                        :: i
+    integer(ikind)                        :: iter
+    real(rkind)                           :: time
+    if(restart == 0) then
+       do i = 1, cfdAppl%model%getnNode()
+          cfdAppl%model%dof(i*4-3) = rho
+          cfdAppl%model%dof(i*4-2) = rho*Vx
+          cfdAppl%model%dof(i*4-1) = rho*Vy
+          cfdAppl%model%dof(i*4  ) = rho*(Cv*T+0.5d0*(Vx**2+Vy**2)) 
+       end do
+       call cfdAppl%model%processInfo%setStep(0)
+       call cfdAppl%model%processInfo%setTime(0._rkind)
+    else if(restart == 1) then
+       open(restartFile, file = 'restart.dat')
+       read(restartFile,*) iter
+       read(restartFile,*) time
+       call cfdAppl%model%processInfo%setStep(iter)
+       call cfdAppl%model%processInfo%setTime(time)
+       do i = 1, cfdAppl%model%getnNode()
+          read(restartFile,*) cfdAppl%model%dof(i*4-3), cfdAppl%model%dof(i*4-2), cfdAppl%model%dof(i*4-1), cfdAppl%model%dof(i*4)
+       end do
+       close(restartFile)
+    else
+       print*, '** INVALID RESTART VALUE **'
+    end if
   end subroutine initDof
   
 end module DataInputM

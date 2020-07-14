@@ -1,8 +1,10 @@
 module GIDDataOutputM
   use UtilitiesM
   implicit none
+  
   private
-  public :: printResults, finishProgram, initDataOutput
+  public :: printResults, finishProgram, initDataOutput, openDataOutput, startDataOutput
+  
   interface printResults
      procedure :: printResultsVec1
      procedure :: printResultsVec2
@@ -12,14 +14,18 @@ module GIDDataOutputM
      procedure :: printResults3DVec3
      procedure :: printResultsVecOnNodesNDof
   end interface printResults
+  
   interface finishProgram
      procedure :: finishProgram
   end interface finishProgram
+  
   integer(ikind), parameter    :: projectData = 80
   integer(ikind), parameter    :: results = 3
   integer(ikind), dimension(8) :: date_time
   character(100)               :: projectName
+  
 contains
+
   subroutine initDataOutput()
     implicit none
     open(projectData, file = 'projectData.dat')
@@ -28,6 +34,19 @@ contains
     open(results, file = trim(projectName)//'.flavia.res')
     write(results,'(A)')      'GiD Post Result File 1.0'
   end subroutine initDataOutput
+  
+  subroutine openDataOutput()
+    implicit none
+    open(projectData, file = 'projectData.dat')
+    read(projectData, '(A)') projectName
+    close(projectData)
+    open(results, file = trim(projectName)//'.flavia.res', access = 'append')
+  end subroutine openDataOutput
+
+  subroutine startDataOutput()
+    implicit none
+    write(results,'(A)')      'GiD Post Result File 1.0'
+  end subroutine startDataOutput
   
   subroutine printResultsVec1(resultName, step, graphType, locationName, resultNumber&
        , component1)

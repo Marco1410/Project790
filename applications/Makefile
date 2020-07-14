@@ -10,9 +10,9 @@ CFD2DDIR           := CFD2D
 
 #========================================================================
 main:
-	@echo "                  *****************************                 "
-	@echo "                  * Building all applications *                 "
-	@echo "                  *****************************                 " 
+	@echo " *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *  "
+	@echo "* * * * * * * * * * Building all applications * * * * * * * * * "
+	@echo "   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *" 
 	(cd $(THERMAL2DDIR)      ; make)
 	(cd $(STRUCTURAL2DDIR)   ; make)
 	(cd $(THERMALSTRUCT2DDIR); make)
@@ -22,9 +22,9 @@ main:
 	(cd $(CFD2DDIR)          ; make)
 
 clean:
-	@echo "                  *****************************                 "
-	@echo "                  * Cleaning all applications *                 "
-	@echo "                  *****************************                 " 
+	@echo " *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *  "
+	@echo "* * * * * * * * * * Cleaning all applications * * * * * * * * * "
+	@echo "   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *" 
 	(cd $(THERMAL2DDIR)      ; make clean)
 	(cd $(STRUCTURAL2DDIR)   ; make clean)
 	(cd $(THERMALSTRUCT2DDIR); make clean)
