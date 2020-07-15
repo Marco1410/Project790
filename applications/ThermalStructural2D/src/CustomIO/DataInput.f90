@@ -51,7 +51,7 @@ module DataInputM
   character(100)               :: projectName
   character(100)               :: path
   character(100)               :: aux
-  logical       , parameter    :: verbose = .false.
+  logical       , parameter    :: verbose = .true.
   logical                      :: isMaterialAsigned = .true.
   
   interface initFEM2D
@@ -111,11 +111,11 @@ contains
     read(project,*)  aux, nFixDisplY
     read(project,*)  aux, nNormalFlux
     read(project,*)  aux, nConvection
-    read(project,*)  aux, nPressure
     read(project,*)  aux, nSourceOnPoints
     read(project,*)  aux, nSourceOnSurfaces
     read(project,*)  aux, nPointSource
     read(project,*)  aux, nSurfaceSource
+    read(project,*)  aux, nPressure
     read(project,*)  aux, nLoadOnPoints
     read(project,*)  aux, nLoadOnSurfaces
     read(project,*)  aux, nPointLoad
