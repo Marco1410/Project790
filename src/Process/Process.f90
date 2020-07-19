@@ -5,7 +5,7 @@ module ProcessM
   private
   public :: ProcessDT, NewProcessDT, SetNewProcess
 
-  type, abstract :: NewProcessDT
+  type :: NewProcessDT
   end type NewProcessDT
 
   interface SetNewProcess
