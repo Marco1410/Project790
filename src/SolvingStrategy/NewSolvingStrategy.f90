@@ -10,7 +10,7 @@ module NewSolvingStrategyM
   private
   public :: NewSolvingStrategyDT
   
-  type, abstract, extends(ProcessDT) :: NewSolvingStrategyDT
+  type, extends(ProcessDT) :: NewSolvingStrategyDT
      type(BuilderAndSolverDT)          :: builderAndSolver
      type(SchemeDT)                    :: scheme
      class(NewStrategyDT), allocatable :: strategy
@@ -18,7 +18,7 @@ module NewSolvingStrategyM
      procedure :: setStrategy
      procedure :: changeStrategy
      procedure :: useStrategy
-  end type NewSolvingStrategyDT
+  end type NewSolvingStrategyDT 
 
 contains
 
