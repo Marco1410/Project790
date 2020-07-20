@@ -11,7 +11,7 @@ module BuilderAndSolverM
   private
   public :: NewBuilderAndSolverDT, BuilderAndSolverDT, SetBuilderAndSolver
   
-  type, abstract :: NewBuilderAndSolverDT
+  type :: NewBuilderAndSolverDT
      type(LinearSolverDT)    :: userLinearSolver
      type(NonLinearSolverDT) :: userNonLinearSolver
    contains

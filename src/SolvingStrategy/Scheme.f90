@@ -5,8 +5,7 @@ module SchemeM
   private
   public :: NewSchemeDT, SchemeDT, SetScheme
 
-  type, abstract :: NewSchemeDT
-   contains
+  type :: NewSchemeDT
   end type NewSchemeDT
   
   interface SetScheme
