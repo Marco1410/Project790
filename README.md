@@ -23,3 +23,5 @@ This framework serves three distinct purposes:
     + Mach distribution
     + Internal Energy distribution
     + Density distribution
++ For people interested in making use of the Framework's features in order to develop their own applications. To whom, a wiki will be available soon. Altough we hope that looking at the currently existing applications serves as a clear enough guide to obtain the general ideas.
++ For developers and students interested in getting into the framework's core classes, be it in order to add new features, or to borrow some ideas for their own developments!
