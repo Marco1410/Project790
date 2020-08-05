@@ -1,7 +1,6 @@
-# Project790
+# Project790 [![License](https://img.shields.io/badge/license-MIT-red.svg)]()
 ### Facundo Nicolás Airaudo & Marco Antonio Zuñiga
 ***
-[![License](https://img.shields.io/badge/license-MIT-red.svg)]()
 
 Project790 is a pure Fortran(KISS) Object Oriented Framework for the solution of Finite Element Method based problems.
 This framework serves three distinct purposes:
@@ -16,7 +15,7 @@ This framework serves three distinct purposes:
     + Normal and shear stress field
     + Strain distribution
   + **Structural3D** Solves the linear elasticity equations for three-dimensional solids. Presents the same results as the above application.
-  + **ThermalStructural2D** Solves in tandem the heat transfer equation and the linear elasticity equation for two-dimensional problems. To the structural calculation it is added an initial deformacion for a temperature differential ![alt text](https://imgur.com/a/vK5td5N "DeltaT")
+  + **ThermalStructural2D** Solves in tandem the heat transfer equation and the linear elasticity equation for two-dimensional problems. To the structural calculation it is added an initial deformacion for a temperature differential ![alt text](https://i.imgur.com/aMblv4X.png "DeltaT")
   + **CFD2D** Solves Euler's equations for two-dimensional domains and compressible flow. Presents as results:
     + Velocity field
     + Pressure distribution
