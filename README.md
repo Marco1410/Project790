@@ -15,7 +15,7 @@ This framework serves three distinct purposes:
     + Normal and shear stress field
     + Strain distribution
   + **Structural3D** Solves the linear elasticity equations for three-dimensional solids. Presents the same results as the above application.
-  + **ThermalStructural2D** Solves in tandem the heat transfer equation and the linear elasticity equation for two-dimensional problems. To the structural calculation it is added an initial deformacion for a temperature differential <img src="https://i.imgur.com/aMblv4X.png" alt="DeltaT" width="20"/>.
+  + **ThermalStructural2D** Solves in tandem the heat transfer equation and the linear elasticity equation for two-dimensional problems. To the structural calculation it is added an initial deformacion for a temperature differential <img src="https://i.imgur.com/GhbWvJa.png" alt="DeltaT" width="20"/>.
   + **CFD2D** Solves Euler's equations for two-dimensional domains and compressible flow. Presents as results:
     + Velocity field
     + Pressure distribution
