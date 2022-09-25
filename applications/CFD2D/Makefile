@@ -6,7 +6,7 @@ OBJECTDIR	:=  Objects
 LIB		:=  ../../lib
 LIBOBJECTS	:=  $(LIB)/Objects
 COMPILER	:=  ifort
-FFLAGS		:=  -Ofast -qopenmp -free -qmkl=parallel -liomp5 -lpthread -ldl -module $(OBJECTDIR)
+FFLAGS		:=  -Ofast -qopenmp -free -traceback -qmkl=parallel -liomp5 -lpthread -ldl -module $(OBJECTDIR)
 FFLAGSDebug 	:=  -O0 -fpp -check bounds -traceback -warn nounused -module $(OBJECTDIR)
 
 OBJECTS := $(BINDIR)/CFDMaterial.o      \
