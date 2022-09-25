@@ -4,62 +4,62 @@
 VPATH		:=  src
 BINDIR		:=  lib/Bin
 OBJECTDIR	:=  lib/Objects
+LIBOBJECTDIR	:=  /usr/include/mkl/
 LIBDIR		:=  lib
 COMPILER	:=  ifort
-FFLAGS		:=  -Ofast -qopenmp -free -mkl -liomp5 -lpthread -ldl -module $(OBJECTDIR)
+FFLAGS		:=  -Ofast -qopenmp -free -qmkl=parallel -liomp5 -lpthread -ldl -module $(OBJECTDIR) -I$(LIBOBJECTDIR)
 FFLAGSDebug 	:=  -O0 -fpp -check bounds -traceback -warn nounused -module $(OBJECTDIR)
 
-OBJECTS := $(BINDIR)/Utilities.o                \
-	$(BINDIR)/Debugger.o                    \
-	$(BINDIR)/Quicksort.o                   \
-	$(BINDIR)/SparseKit.o                   \
-	                                        \
-	$(BINDIR)/FortranParser.o               \
-	$(BINDIR)/FortranParserPtr.o            \
-	$(BINDIR)/Property.o                    \
-	                                        \
-	$(BINDIR)/Source.o                      \
-	$(BINDIR)/SourcePtr.o                   \
-                                                \
-	$(BINDIR)/LeftHandSide.o                \
-                                                \
-	$(BINDIR)/Point.o                       \
-	$(BINDIR)/Dof.o                         \
-	$(BINDIR)/Node.o                        \
-	$(BINDIR)/NodePtr.o                     \
-                                                \
-	$(BINDIR)/Integrator.o                  \
-	$(BINDIR)/IntegratorPtr.o               \
-	                                        \
-	$(BINDIR)/Geometry.o                    \
-	$(BINDIR)/Line1D2Node.o                 \
-	$(BINDIR)/Line1D3Node.o                 \
-	$(BINDIR)/Line2D2Node.o                 \
-	$(BINDIR)/Line2D3Node.o                 \
-	$(BINDIR)/Line3D2Node.o                 \
-	$(BINDIR)/Line3D3Node.o                 \
-	$(BINDIR)/Triangle2D3Node.o             \
-	$(BINDIR)/Triangle2D6Node.o             \
-	$(BINDIR)/Triangle3D3Node.o             \
-	$(BINDIR)/Triangle3D6Node.o             \
-	$(BINDIR)/Quadrilateral2D4Node.o        \
-	$(BINDIR)/Quadrilateral2D8Node.o        \
-	$(BINDIR)/Quadrilateral3D4Node.o        \
-	$(BINDIR)/Quadrilateral3D8Node.o        \
-	$(BINDIR)/Tetrahedron3D4Node.o          \
-	$(BINDIR)/Tetrahedron3D10Node.o         \
-	$(BINDIR)/Hexahedron3D8Node.o           \
-	$(BINDIR)/Hexahedron3D20Node.o          \
-	                                        \
-	$(BINDIR)/ProcessInfo.o			\
-                                                \
-	$(BINDIR)/Element.o                     \
-	$(BINDIR)/ElementPtr.o                  \
-	                                        \
-	$(BINDIR)/Condition.o                   \
-	$(BINDIR)/ConditionPtr.o                \
-                                                \
-	$(BINDIR)/Mesh.o                        \
+OBJECTS := $(BINDIR)/Utilities.o              \
+	$(BINDIR)/Debugger.o                  \
+	$(BINDIR)/Quicksort.o                 \
+	$(BINDIR)/SparseKit.o                 \
+	                                      \
+	$(BINDIR)/FortranParser.o             \
+	$(BINDIR)/FortranParserPtr.o          \
+	$(BINDIR)/Property.o                  \
+	                                      \
+	$(BINDIR)/Source.o                    \
+	$(BINDIR)/SourcePtr.o                 \
+                                              \
+	$(BINDIR)/LeftHandSide.o              \
+                                              \
+	$(BINDIR)/Point.o                     \
+	$(BINDIR)/Dof.o                       \
+	$(BINDIR)/Node.o                      \
+	$(BINDIR)/NodePtr.o                   \
+                                              \
+	$(BINDIR)/Integrator.o                \
+	$(BINDIR)/IntegratorPtr.o             \
+	                                      \
+	$(BINDIR)/Geometry.o                  \
+	$(BINDIR)/Line1D2Node.o               \
+	$(BINDIR)/Line1D3Node.o               \
+	$(BINDIR)/Line2D2Node.o               \
+	$(BINDIR)/Line2D3Node.o               \
+	$(BINDIR)/Line3D2Node.o               \
+	$(BINDIR)/Line3D3Node.o               \
+	$(BINDIR)/Triangle2D3Node.o           \
+	$(BINDIR)/Triangle2D6Node.o           \
+	$(BINDIR)/Triangle3D3Node.o           \
+	$(BINDIR)/Triangle3D6Node.o           \
+	$(BINDIR)/Quadrilateral2D4Node.o      \
+	$(BINDIR)/Quadrilateral2D8Node.o      \
+	$(BINDIR)/Quadrilateral3D4Node.o      \
+	$(BINDIR)/Quadrilateral3D8Node.o      \
+	$(BINDIR)/Tetrahedron3D4Node.o        \
+	$(BINDIR)/Tetrahedron3D10Node.o       \
+	$(BINDIR)/Hexahedron3D8Node.o         \
+	$(BINDIR)/Hexahedron3D20Node.o        \
+	                                      \
+	$(BINDIR)/ProcessInfo.o		\
+	$(BINDIR)/Element.o                   \
+	$(BINDIR)/ElementPtr.o                \
+	                                      \
+	$(BINDIR)/Condition.o                 \
+	$(BINDIR)/ConditionPtr.o              \
+                                              \
+	$(BINDIR)/Mesh.o                      \
 	$(BINDIR)/Model.o			\
 						\
 	$(BINDIR)/Preconditioner.o		\
@@ -67,13 +67,13 @@ OBJECTS := $(BINDIR)/Utilities.o                \
 	$(BINDIR)/UsePreconditioner.o		\
 						\
 	$(BINDIR)/ReorderSystem.o		\
-	$(BINDIR)/ReorderSystemMethod.o		\
+	$(BINDIR)/ReorderSystemMethod.o	\
 	$(BINDIR)/UseReorderSystem.o		\
-                                                \
-	$(BINDIR)/DirectLinearSolver.o		\
+                                              \
+	$(BINDIR)/DirectLinearSolver.o	\
 	$(BINDIR)/IterativeLinearSolver.o	\
 	$(BINDIR)/LinearSolver.o		\
-	$(BINDIR)/mklPardiso.o                  \
+	$(BINDIR)/mklPardiso.o                \
 	$(BINDIR)/BiConjugateGradient.o 	\
 						\
 	$(BINDIR)/NonLinearSolvers.o		\
@@ -87,13 +87,13 @@ OBJECTS := $(BINDIR)/Utilities.o                \
 	$(BINDIR)/BaseIntegrand.o		\
 	$(BINDIR)/Integrand.o			\
 	$(BINDIR)/BaseModel.o			\
-	$(BINDIR)/RK2.o				\
-	$(BINDIR)/RK4.o				\
+	$(BINDIR)/RK2.o			\
+	$(BINDIR)/RK4.o			\
 	$(BINDIR)/AdamsB4.o			\
 	$(BINDIR)/ExplicitEuler.o		\
-	$(BINDIR)/NewStrategy.o			\
-	$(BINDIR)/NewSolvingStrategy.o          \
-                                                \
+	$(BINDIR)/NewStrategy.o		\
+	$(BINDIR)/NewSolvingStrategy.o         \
+                                               \
 	$(BINDIR)/GIDDataOutput.o               
 
 #=============================================================
@@ -101,9 +101,9 @@ main: $(OBJECTS)
 	ar rcv $(LIBDIR)/project789.a $(OBJECTS)
 
 install: $(shell mkdir -p $(BINDIR))			\
-	 $(shell mkdir -p $(OBJECTDIR))			\
-	 $(OBJECTS)					\
-	ar rcv $(LIBDIR)/project789.a $(OBJECTS)
+	 $(shell mkdir -p $(OBJECTDIR))		\
+	 $(OBJECTS)					
+	 ar rcv $(LIBDIR)/project789.a $(OBJECTS)
 
 clean:
 	rm -f $(BINDIR)/*.o $(LIBDIR)/*.a $(OBJECTDIR)/*.mod

@@ -51,7 +51,7 @@
   !                   Subroutine sparse_sparse_sub  ->  Operator:
   !                                                        (-)
   !*************************************************************
-include 'mkl_pardiso.f90'  
+include 'mkl_pardiso.f90'
 module SparseKit
 
   !***********************************************
@@ -59,7 +59,7 @@ module SparseKit
   !***********************************************
   use UtilitiesM
   use quickSortM
-  use mkl_pardiso
+  use mkl_pardiso_private
   
   implicit none
   
@@ -407,7 +407,8 @@ contains
        index = index + 1
     end do
     if(.not.positionExists) then
-       print'(A)', '** Attempted to change the value in a position not allocated before making the CRS, implementation soon maybe **'
+       print'(A)', '** Attempted to change the value in a position not allocated  ' 
+       print'(A)', '   before making the CRS, implementation soon maybe         **'
     end if
   end subroutine change
 
@@ -443,9 +444,9 @@ contains
   !     Input, i(int), j(int)
   !     Output, get(i,j)(realrkind)
   !***************************************************
-  real(rkind) pure function get(this, i, j)
+  real(rkind) function get(this, i, j)
     implicit none
-    class(Sparse) , intent(in) :: this
+    class(Sparse), intent(inout) :: this
     integer(ikind), intent(in) :: i
     integer(ikind), intent(in) :: j
     integer(ikind) :: k
@@ -468,9 +469,9 @@ contains
   !     Input, -
   !     Output, getnnz()(integer(ikind))
   !***************************************************
-  integer(ikind) pure function getnnz(this)
+  integer(ikind) function getnnz(this)
     implicit none
-    class(Sparse), intent(in) :: this
+    class(Sparse), intent(inout) :: this
     getnnz = this%nnz
   end function getnnz
   
@@ -482,9 +483,9 @@ contains
   !     Input, -
   !     Output, getn()(integer(ikind))
   !***************************************************
-  integer(ikind) pure function getn(this)
+  integer(ikind) function getn(this)
     implicit none
-    class(Sparse), intent(in) :: this
+    class(Sparse), intent(inout) :: this
     getn = this%n
   end function getn
 
@@ -496,11 +497,11 @@ contains
   !     Input, -
   !     Output, getA(:)(Real(rkind))
   !***************************************************
-  pure function getA(this)
+  function getA(this)
     implicit none
-    class(Sparse), intent(in)        :: this
+    class(Sparse), intent(inout)    :: this
     real(rkind), dimension(this%nnz) :: getA
-    getA = this%A
+       getA = this%A
   end function getA
 
   !***************************************************
@@ -511,11 +512,11 @@ contains
   !     Input, -
   !     Output, getAI(:)(Integer(ikind))
   !***************************************************
-  pure function getAI(this)
+  function getAI(this)
     implicit none
-    class(Sparse) , intent(in)         :: this
+    class(Sparse), intent(inout)       :: this
     integer(ikind), dimension(this%n+1) :: getAI
-    getAI = this%AI
+       getAI = this%AI
   end function getAI
 
     !***************************************************
@@ -526,11 +527,11 @@ contains
   !     Input, -
   !     Output, getAJ(:)(Integer(ikind))
   !***************************************************
-  pure function getAJ(this)
+  function getAJ(this)
     implicit none
-    class(Sparse) , intent(in)         :: this
+    class(Sparse), intent(inout)       :: this
     integer(ikind), dimension(this%nnz) :: getAJ
-    getAJ = this%AJ
+       getAJ = this%AJ
   end function getAJ
   
   !***************************************************
@@ -1077,7 +1078,7 @@ contains
              call inverse%append( val = solution(j) , row = i, col = j)
           end if
        end do
-       !write(*,*) 'Inverse =>', (100*i/A%getn()),'%'
+       write(*,*) 'Inverse =>', (100*i/A%getn()),'%'
     end do
     deallocate(vector,solution)
     call inverse%makeCRS(sortRows)

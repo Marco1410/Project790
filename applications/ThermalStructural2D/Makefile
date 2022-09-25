@@ -8,7 +8,7 @@ THERMALSRC      :=  ../Thermal2D/src
 STRUCTURALSRC   :=  ../Structural2D/src
 LIBOBJECTS	:=  $(LIB)/Objects
 COMPILER	:=  ifort
-FFLAGS		:=  -Ofast -qopenmp -free -check bounds -mkl -liomp5 -lpthread -ldl -traceback -module $(OBJECTDIR)
+FFLAGS		:=  -Ofast -qopenmp -free -check bounds -qmkl=parallel -liomp5 -lpthread -ldl -traceback -module $(OBJECTDIR)
 FFLAGSDebug 	:=  -O0 -fpp -check bounds -traceback -warn nounused -module $(OBJECTDIR)
 
 OBJECTS := $(BINDIR)/ThermalMaterial.o          \
@@ -44,8 +44,8 @@ main: $(OBJECTS)
 	$(COMPILER) $(FFLAGS) $^ -I$(LIBOBJECTS) -L$(LIB) $(LIBRARIES) -o $@
 
 install: $(shell mkdir -p $(BINDIR))			\
-	 $(shell mkdir -p $(OBJECTDIR))			\
-	 $(OBJECTS)					\
+	 $(shell mkdir -p $(OBJECTDIR))		\
+	 $(OBJECTS)					
 	$(COMPILER) $(FFLAGS) $^ -I$(LIBOBJECTS) -L$(LIB) $(LIBRARIES) -o $@
 
 clean:
